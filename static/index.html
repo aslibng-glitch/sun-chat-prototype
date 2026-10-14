@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sun.chat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ============ NAV ============ -->
+  <nav class="nav" id="nav">
+    <div class="nav-left" id="navLeft">
+      <a class="logo-group" id="logoHome">
+        <img src="sun-logo.svg" class="logo-icon" alt="Sun" />
+        <span class="logo-text">sun.chat</span>
+      </a>
+      <!-- chat page links (Home / Feedback / Reset Chat) injected here by JS -->
+      <div class="nav-chat-links" id="navChatLinks" hidden>
+        <button class="nav-link" data-goto="landing" data-i18n="nav.home">Home</button>
+        <button class="nav-link" data-action="feedback" data-i18n="nav.feedback">Feedback</button>
+        <button class="nav-link" data-action="reset-chat" data-i18n="nav.resetChat">Reset Chat</button>
+      </div>
+    </div>
+    <div class="nav-right" id="navRight">
+      <div class="nav-page-links" id="navPageLinks">
+        <button class="nav-link uppercase" data-goto="communities" data-page="communities" data-i18n="nav.communities">Local Communities</button>
+        <button class="nav-link uppercase" data-goto="security" data-page="security" data-i18n="nav.security">Safety</button>
+        <button class="nav-link uppercase" data-goto="privacy" data-page="privacy" data-i18n="nav.privacy">Privacy</button>
+      </div>
+      <div class="lang-toggle" id="langToggle">
+        <span class="lang-pill active" data-lang="ENG">ENG</span>
+        <span class="lang-pill" data-lang="TR">TR</span>
+      </div>
+      <button class="quick-exit-btn" id="quickExitBtn" data-i18n="nav.quickExit">QUICK EXIT</button>
+    </div>
+  </nav>
+
+  <!-- ============ LANDING PAGE ============ -->
+  <section class="page" id="page-landing">
+    <div class="landing-main">
+      <div class="landing-avatar-col">
+        <div class="avatar-circle avatar-circle-lg">
+          <img src="sun-logo.svg" class="avatar-img avatar-img-lg" alt="Sun" />
+        </div>
+        <div class="avatar-name" data-i18n="landing.avatarName">Sun</div>
+        <div class="avatar-role" data-i18n="landing.avatarRole">AI Support Companion</div>
+      </div>
+      <div class="landing-chat-col">
+        <div class="intro-bubble">
+          <p data-i18n="landing.intro1">I'm a chatbot, not a human being. If something is happening in your relationship that might be domestic abuse, I'm here to help.</p>
+          <p data-i18n="landing.intro2">Anyone can ask me questions about their safety, reporting options and where to find support, including services that understand migrant experiences.</p>
+          <p data-i18n="landing.intro3">I've been designed to help Turkish migrant women who live in the UK, but some of my information may be useful to you even if you live elsewhere.</p>
+          <div class="bubble-meta" data-i18n="landing.bubbleMeta">Sun • AI</div>
+        </div>
+        <button class="btn-coral btn-pill" id="startChattingBtn" data-i18n="landing.startChatting">Start Chatting</button>
+      </div>
+    </div>
+    <footer class="landing-footer">
+      <div class="footer-text-col">
+        <span data-i18n="landing.footerEncrypted">This conversation is encrypted and private. Click "Quick Exit" at any time to clear screen instantly.</span>
+        <span class="link" data-goto="privacy" data-i18n="landing.footerAgree">By chatting, you agree to our Privacy Policy &amp; Terms</span>
+      </div>
+      <div class="footer-session">
+        <span data-i18n="landing.activeSession">Active Session</span>
+        <div class="avatar-circle avatar-circle-sm">
+          <img src="sun-logo.svg" class="avatar-img avatar-img-sm" alt="Sun" />
+        </div>
+      </div>
+    </footer>
+  </section>
+
+  <!-- ============ CHAT PAGE ============ -->
+  <section class="page" id="page-chat" hidden>
+    <div class="chat-empty-state" id="chatEmptyState">
+      <div class="avatar-circle avatar-circle-md">
+        <img src="sun-logo.svg" class="avatar-img avatar-img-md" alt="Sun" />
+      </div>
+      <div class="chat-header-text">
+        <h1 data-i18n="chat.heading">How can I help you today?</h1>
+        <p data-i18n="chat.disclaimerEmpty">I'm an AI support. If you're in immediate danger, contact emergency services. I can't help in emergencies. I can make mistakes, please double-check important information. If you face any issues, please share your feedback.</p>
+      </div>
+      <div class="chat-empty-input-wrap">
+        <div class="chat-empty-input">
+          <textarea id="chatInputEmpty" rows="1" placeholder="Which language would you like to chat in?" data-i18n-placeholder="chat.placeholderEmpty"></textarea>
+          <button class="send-btn send-btn-circle" id="sendBtnEmpty" aria-label="Send">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M4 4l16 8-16 8 4-8-4-8z"/></svg>
+          </button>
+        </div>
+        <div class="progress-bar-placeholder"></div>
+        <div class="quick-actions-row" id="quickActionsEmpty">
+          <button class="pill" data-chip data-i18n="chip.notSure">Not sure where to start</button>
+          <button class="pill" data-chip data-i18n="chip.needSupport">I need support</button>
+          <button class="pill" data-chip data-i18n="chip.signsOfAbuse">What are signs of abuse?</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-conversation-state" id="chatConversationState" hidden>
+      <div class="messages-stream" id="messagesStream"></div>
+      <div class="chat-bottom-wrap">
+        <div class="chat-input-box">
+          <div class="chat-input-row">
+            <textarea id="chatInputConvo" rows="1" placeholder="What would you like to talk about?" data-i18n-placeholder="chat.placeholderConvo"></textarea>
+            <button class="send-btn send-btn-square" id="sendBtnConvo" aria-label="Send">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            </button>
+          </div>
+          <p class="chat-input-disclaimer" data-i18n="chat.disclaimerConvo">I'm an AI chatbot. If you're in immediate danger, contact emergency services. I can't help in emergencies.</p>
+        </div>
+      </div>
+    </div>
+
+    <footer class="chat-footer">
+      <span data-i18n-html="chat.footerAgree">By using this chat you agree to Sun's <span class="link" data-goto="privacy">Privacy Policy</span></span>
+    </footer>
+  </section>
+
+  <!-- ============ PRIVACY POLICY PAGE ============ -->
+  <section class="page" id="page-privacy" hidden>
+    <div class="privacy-header">
+      <h1 data-i18n="privacy.title">Privacy Policy</h1>
+      <div class="hr-line"></div>
+    </div>
+    <div class="privacy-body">
+      <div class="privacy-section">
+        <h3 data-i18n="privacy.s1.h">1. Introduction</h3>
+        <p data-i18n="privacy.s1.p">Your privacy is important to us. At Sun, we are committed to protecting user data and ensuring transparency in how we operate. This Privacy Policy outlines how we handle information when you interact with Sun.chat and its associated services.</p>
+      </div>
+      <div class="privacy-section">
+        <h3 data-i18n="privacy.s2.h">2. No Collection of Personal Information</h3>
+        <p data-i18n="privacy.s2.p">Sun does not require an account or any personally identifiable information to use the service. Your conversation is not stored once you close or refresh the page. To generate its responses, Sun sends your messages to Anthropic, the company behind the underlying AI technology. Anthropic keeps this information for a maximum of seven days for security purposes, after which it is automatically deleted, and it is never used to train their AI models.</p>
+      </div>
+      <div class="privacy-section">
+        <h3 data-i18n="privacy.s3.h">3. Data Security and Protection</h3>
+        <p data-i18n="privacy.s3.p">While we do not collect personal data, we take appropriate measures to ensure a secure and private user experience. All interactions with Sun are encrypted and protected against unauthorized access or misuse.</p>
+      </div>
+      <div class="privacy-section">
+        <h3 data-i18n="privacy.s4.h">4. Third-Party Services and Messaging Apps</h3>
+        <p data-i18n="privacy.s4.p">Our platform may contain links to external sites. We are not responsible for the privacy practices of these third-party platforms.</p>
+      </div>
+      <div class="privacy-section">
+        <h3 data-i18n="privacy.s5.h">5. User Rights and Control</h3>
+        <p data-i18n="privacy.s5.p">Because Sun does not keep a lasting record of your conversation, there is nothing to request or delete once this short window closes automatically.</p>
+      </div>
+      <div class="privacy-section">
+        <h3 data-i18n="privacy.s6.h">6. Acceptance of Policy</h3>
+        <p data-i18n="privacy.s6.p">By using Sun.chat, you acknowledge and agree to this Privacy Policy.</p>
+      </div>
+      <div class="privacy-section">
+        <h3 data-i18n="privacy.s7.h">7. Contact Us</h3>
+        <p data-i18n="privacy.s7.p">If you have any questions about our privacy practices, feel free to reach out.</p>
+      </div>
+    </div>
+    <footer class="privacy-footer">
+      <div class="footer-text-col">
+        <span data-i18n="privacy.footerEncrypted">This conversation is encrypted and private. Click "Quick Exit" at any time to clear screen instantly.</span>
+        <span class="link link-dark" data-goto="chat" data-i18n="privacy.footerReturn">You are viewing the current Privacy Policy. Return to Chat</span>
+      </div>
+      <div class="avatar-circle avatar-circle-sm">
+        <img src="sun-logo.svg" class="avatar-img avatar-img-sm" alt="Sun" />
+      </div>
+    </footer>
+  </section>
+
+  <!-- ============ LOCAL COMMUNITIES PAGE ============ -->
+  <section class="page" id="page-communities" hidden>
+    <div class="communities-header">
+      <h1 data-i18n="communities.title">LOCAL COMMUNITIES</h1>
+      <p data-i18n="communities.subtitle">You're not alone. Connect with local communities for Turkish women</p>
+    </div>
+    <div class="communities-body">
+      <div class="communities-text-col">
+        <h3 class="communities-subheading" data-i18n="communities.orgsHeading">Local Community Centres and Organisations</h3>
+        <div class="org-list">
+          <div class="org-item">
+            <div class="org-name"><a class="org-link" href="https://daymer.org/" target="_blank" rel="noopener noreferrer">Day-Mer (Turkish and Kurdish Community Centre)</a></div>
+            <div class="org-desc" data-i18n="communities.daymer">Established in London in 1989, Day-Mer is a long-standing community centre that supports women's integration into society, access to social rights, and efforts to reduce social isolation. It has a dedicated women's section and runs programmes specifically for women.</div>
+          </div>
+          <div class="org-item">
+            <div class="org-name"><a class="org-link" href="https://imece.org.uk/" target="_blank" rel="noopener noreferrer">IMECE Women's Centre</a></div>
+            <div class="org-desc" data-i18n="communities.imece">Provides support to Turkish, Kurdish, Turkish Cypriot and other migrant women experiencing issues such as violence, discrimination and poverty. It offers guidance, counselling and advocacy services.</div>
+          </div>
+          <div class="org-item">
+            <div class="org-name"><a class="org-link" href="https://www.twpa.co.uk/" target="_blank" rel="noopener noreferrer">TWPA (Turkish Women's Philanthropic Association)</a></div>
+            <div class="org-desc" data-i18n="communities.twpa">One of the UK's long-established Turkish women's organisations, TWPA focuses on education, philanthropy and strengthening community connections.</div>
+          </div>
+          <div class="org-item">
+            <div class="org-name"><a class="org-link" href="https://ikwro.org.uk/" target="_blank" rel="noopener noreferrer">IKWRO (Women's Rights Organisation)</a></div>
+            <div class="org-desc" data-i18n="communities.ikwro">Provides vital support and advice to migrant women, including Turkish-language support, particularly around issues such as so-called honour-based abuse, domestic violence and forced marriage.</div>
+          </div>
+        </div>
+        <div class="hr-line"></div>
+        <h3 class="communities-subheading" data-i18n="communities.networksHeading">Local and Online Networks</h3>
+        <div class="org-list">
+          <div class="org-item">
+            <div class="org-name" data-i18n="communities.socialGroupsName">Community &amp; Social Groups</div>
+            <div class="org-desc" data-i18n-html="communities.socialGroupsDesc">Informal women's communities, such as <a class="org-link" href="https://www.risehercollective.com/" target="_blank" rel="noopener noreferrer">Rise Her Collective</a>, organise social meet-ups, outings and other activities, helping women build connections and support networks.</div>
+          </div>
+          <div class="org-item">
+            <div class="org-name" data-i18n="communities.socialMediaName">Social Media Communities</div>
+            <div class="org-desc" data-i18n-html="communities.socialMediaDesc">Facebook groups such as <a class="org-link" href="https://www.facebook.com/groups/gocmenanneler/" target="_blank" rel="noopener noreferrer">Göçmen Kadınlar</a> provide spaces where migrant women can exchange information, connect with one another, find peer support and navigate life in the UK.</div>
+          </div>
+        </div>
+      </div>
+      <div class="communities-illustration">
+        <img src="community-illustration.svg" alt="Community of women supporting each other" />
+      </div>
+    </div>
+    <footer class="communities-footer">
+      <div class="communities-footer-cols">
+        <div class="footer-col">
+          <div class="footer-col-title" data-i18n="communities.footerPrivacyTitle">Privacy Policy</div>
+          <span class="link link-dark" data-goto="privacy" data-i18n="communities.footerPrivacyLink">Read Sun's Privacy Policy</span>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title footer-col-title-red" data-i18n="communities.footerEmergencyTitle">Emergency Contact</div>
+          <div class="footer-col-text" data-i18n="communities.footerEmergencyText">If you're in immediate danger, contact emergency services.</div>
+          <a class="link link-dark" href="https://www.nationaldahelpline.org.uk/" target="_blank" rel="noopener noreferrer" data-i18n="communities.footerContact">Contact</a>
+        </div>
+      </div>
+      <div class="communities-footer-bottom" data-i18n="communities.footerCopyright">© 2026 sun.chat. All rights reserved.</div>
+    </footer>
+  </section>
+
+  <!-- ============ SECURITY / SAFETY TIPS PAGE ============ -->
+  <section class="page" id="page-security" hidden>
+    <div class="security-header">
+      <h1 data-i18n="security.title">Safety Tips</h1>
+      <p data-i18n="security.subtitle">Here are some tips for keeping you and your loved ones safe online.</p>
+      <p class="security-note" data-i18n="security.note">One thing worth knowing: changing a setting, for example changing a password, can sometimes let the other person know something has changed, and that can make their reaction worse. So when you make a change can matter as much as what you change. If you are not sure, it can be safer to talk it through with someone you trust, or with the helpline below, before you make a change.</p>
+      <p class="security-emergency" data-i18n="security.emergency">If you are in immediate danger, call 999. If you have concerns but it is not an emergency, you can call the National Domestic Abuse Helpline any time of day: 0808 2000 247.</p>
+      <div class="hr-line security-hr"></div>
+    </div>
+    <div class="security-body">
+      <div class="security-feature">
+        <div class="security-feature-title" data-i18n="security.f1.title">1. Add a lock to your devices</div>
+        <div class="security-feature-desc" data-i18n="security.f1.desc">Making sure your phone, laptop and tablet each have a lock, a PIN, fingerprint, or face ID, is a good first step. When picking a PIN, it helps to avoid anything easy to guess, like your birthday, part of your name, or a simple sequence like "1234", and to avoid reusing the same code across more than one device. You can usually set or change this in a few taps under your device's "Settings" menu.</div>
+      </div>
+      <div class="security-feature">
+        <div class="security-feature-title" data-i18n="security.f2.title">2. Keep an eye on your browsing history</div>
+        <div class="security-feature-desc" data-i18n-html="security.f2.desc">The sites you visit and when you visited them are usually saved as a history in your browser. If you're worried someone else might see this, you have a few options: use your browser's "private" mode (which doesn't save history), clear your history by hand after each use, or check the separate records kept by search engines like Google or Bing. Women's Aid's <a href="https://womensaid.org.uk/information-support/what-is-domestic-abuse/cover-your-tracks-online/" target="_blank" rel="noopener noreferrer" style="color:#6b7fe0;text-decoration:underline;cursor:pointer">Cover Your Tracks Online</a> page walks through this step by step for each browser.</div>
+      </div>
+      <div class="security-feature">
+        <div class="security-feature-title" data-i18n="security.f3.title">3. Set your devices to lock themselves automatically</div>
+        <div class="security-feature-desc" data-i18n="security.f3.desc">Having your phone or laptop lock on its own shortly after you put it down makes it harder for anyone to look through it without you knowing. This is usually found under a "Screen" or "Lock" setting.</div>
+      </div>
+      <div class="security-feature">
+        <div class="security-feature-title" data-i18n="security.f4.title">4. Turn on two factor authentication</div>
+        <div class="security-feature-desc" data-i18n="security.f4.desc">Adding a second layer beyond your password, like a code sent to your phone when you log in, means an account stays yours even if the password alone becomes known to someone else. It's worth turning this on separately for email, social media, and banking accounts.</div>
+      </div>
+      <div class="security-feature">
+        <div class="security-feature-title" data-i18n="security.f5.title">5. Review who has access to shared accounts or cloud storage</div>
+        <div class="security-feature-desc" data-i18n="security.f5.desc">If you use a shared account, Google Drive, iCloud, OneDrive, and similar, it's a good habit to check every so often who still has access. If there's someone you no longer want to share with, you can remove their access.</div>
+      </div>
+      <div class="security-feature">
+        <div class="security-feature-title" data-i18n="security.f6.title">6. Refresh your social media privacy settings</div>
+        <div class="security-feature-desc" data-i18n-html="security.f6.desc">Check who can see your profile, your friends or followers list, and what you post. You can block or unfollow people, or hide your friends list from others. Women's Aid's <a href="https://womensaid.org.uk/information-support/what-is-domestic-abuse/cover-your-tracks-online/" target="_blank" rel="noopener noreferrer" style="color:#6b7fe0;text-decoration:underline;cursor:pointer">Cover Your Tracks Online</a> page has current, platform by platform guides for Facebook, Instagram, WhatsApp, TikTok, and more.</div>
+      </div>
+      <div class="security-feature">
+        <div class="security-feature-title" data-i18n="security.f7.title">7. Check your cloud backup settings</div>
+        <div class="security-feature-desc" data-i18n="security.f7.desc">It's worth knowing whether your photos and files are being backed up automatically to a cloud service like iCloud or Google Photos, since that affects where your content is stored. You can turn this on or off at any time in your settings.</div>
+      </div>
+      <div class="security-feature">
+        <div class="security-feature-title" data-i18n="security.f8.title">8. Change your PINs and passwords every so often</div>
+        <div class="security-feature-desc" data-i18n="security.f8.desc">Refreshing your passwords from time to time, especially any that someone else may have known at some point, helps you take back control. Aim for a different, hard to guess password for each account.</div>
+      </div>
+    </div>
+    <footer class="communities-footer">
+      <div class="communities-footer-cols">
+        <div class="footer-col">
+          <div class="footer-col-title" data-i18n="security.footerPrivacyTitle">Privacy Policy</div>
+          <span class="link link-dark" data-goto="privacy" data-i18n="security.footerPrivacyLink">Read Sun's Privacy Policy</span>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title footer-col-title-red" data-i18n="security.footerEmergencyTitle">Emergency Contact</div>
+          <div class="footer-col-text" data-i18n="security.footerEmergencyText">If you're in immediate danger, contact emergency services.</div>
+          <a class="link link-dark" href="https://www.nationaldahelpline.org.uk/" target="_blank" rel="noopener noreferrer" data-i18n="security.footerContact">Contact</a>
+        </div>
+      </div>
+      <div class="communities-footer-bottom" data-i18n="security.footerCopyright">© 2026 sun.chat. All rights reserved.</div>
+    </footer>
+  </section>
+
+  <!-- ============ SAFETY MODAL ============ -->
+  <div class="overlay" id="safetyModal" hidden>
+    <div class="modal-card">
+      <h2 class="modal-title" data-i18n="safety.title">Your Safety Matters</h2>
+      <div class="alert-banner">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E9836A" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div class="alert-text" data-i18n="safety.alertText">Quick Exit button is located at the top right corner of every page</div>
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2B2440" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </div>
+      <div class="guidelines">
+        <div class="guidelines-title" data-i18n="safety.guidelinesTitle">For your privacy and safety:</div>
+        <div class="bullet-row"><span class="bullet-dot"></span><span data-i18n="safety.bullet1">The Quick Exit button will immediately redirect you to Google.</span></div>
+        <div class="bullet-row"><span class="bullet-dot"></span><span data-i18n="safety.bullet2">Consider using private/incognito browsing mode.</span></div>
+        <div class="bullet-row"><span class="bullet-dot"></span><span data-i18n="safety.bullet3">Clear your browser history after visiting.</span></div>
+      </div>
+      <label class="checkbox-row">
+        <input type="checkbox" id="dontShowAgain" />
+        <span data-i18n="safety.dontShow">Don't show this message again</span>
+      </label>
+      <div class="modal-actions">
+        <button class="btn-outline" id="safetyUnderstandBtn" data-i18n="safety.understand">I Understand</button>
+        <button class="btn-red" id="safetyLeaveBtn" data-i18n="safety.leaveNow">Leave Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FEEDBACK MODAL ============ -->
+  <div class="overlay" id="feedbackModal" hidden>
+    <div class="modal-card" id="feedbackCard">
+      <div class="modal-header-row">
+        <h2 class="modal-title" data-i18n="feedback.title">Share Your Feedback</h2>
+        <button class="close-btn" id="feedbackCloseBtn">✕</button>
+      </div>
+      <div class="rating-section">
+        <div class="rating-label" data-i18n="feedback.ratingLabel">How would you rate your experience?</div>
+        <div class="star-row" id="starRow">
+          <button class="star-btn" data-star="1">★</button>
+          <button class="star-btn" data-star="2">★</button>
+          <button class="star-btn" data-star="3">★</button>
+          <button class="star-btn" data-star="4">★</button>
+          <button class="star-btn" data-star="5">★</button>
+        </div>
+      </div>
+      <div class="feedback-text-section">
+        <div class="feedback-text-label" data-i18n="feedback.textLabel">Tell us more about your experience</div>
+        <textarea id="feedbackTextarea" placeholder="Your feedback helps us improve..." data-i18n-placeholder="feedback.textPlaceholder"></textarea>
+      </div>
+      <button class="btn-coral btn-full" id="submitFeedbackBtn" data-i18n="feedback.submit">Submit Feedback</button>
+    </div>
+    <div class="modal-card feedback-thanks" id="feedbackThanks" hidden>
+      <p data-i18n="feedback.thanks">Thank you — your feedback helps us improve. 💛</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

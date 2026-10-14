@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="brand-gradient" x1="0%" y1="0%" x2="100%" y2="100%" gradientTransform="rotate(135 0.5 0.5)">
+      <stop offset="0%" stop-color="#d16015" />
+      <stop offset="100%" stop-color="#2B020D" />
+    </linearGradient>
+  </defs>
+
+  <!-- Speech Bubble Silhouette -->
+  <path d="M 256, 42 C 375, 42 460, 127 460, 246 C 460, 345 398, 425 310, 445 L 205, 510 C 202, 512 195, 508 198, 498 L 222, 436 C 185, 436 142, 442 120, 474 C 114, 482 104, 476 106, 466 L 118, 422 C 75, 385 52, 320 52, 246 C 52, 127 137, 42 256, 42 Z" fill="#d16015" />
+
+  
+  <!-- White Face Mask with Pointed Chin -->
+  <path d="M 148, 126 C 215, 114 297, 114 364, 126 C 402, 133 420, 168 420, 222 C 420, 290 380, 346 308, 356 L 256, 404 L 204, 356 C 132, 346 92, 290 92, 222 C 92, 168 110, 133 148, 126 Z" fill="#FFFFFF" />
+  
+  <!-- Eyebrows -->
+  <path d="M 146, 195 Q 186, 160 226, 185" fill="none" stroke="#4C0519" stroke-width="15" stroke-linecap="round" />
+  <path d="M 286, 185 Q 326, 160 366, 195" fill="none" stroke="#4C0519" stroke-width="15" stroke-linecap="round" />
+
+  <!-- Eyes & Smile -->
+  <circle cx="180" cy="245" r="28" fill="#4C0519" />
+  <circle cx="332" cy="245" r="28" fill="#4C0519" />
+  <path d="M 226, 298 Q 256, 328 286, 298" fill="none" stroke="#4C0519" stroke-width="13" stroke-linecap="round" />
+    
+
+  
+</svg>
